@@ -12,7 +12,6 @@ import clipboard
 class QRCodeGenerator:
     def __init__(self, master):
 
-        # Desinging
         self.master = master
         self.master.title("QR Code Generator")
         self.master.geometry("450x230+700+200")
@@ -63,7 +62,6 @@ class QRCodeGenerator:
             "Arial", 15, "bold"), fg="White", bg="#5D7283", relief="flat", command=self.generate_qr_code)
         self.generate_button.place(x=172, y=163)
 
-        # Saving options
         self.options = {
             'initialdir': '~/Pictures',
             'initialfile': 'untitled.png',
@@ -73,19 +71,18 @@ class QRCodeGenerator:
         }
 
     def go_back(self):
-        self.master.destroy()  # Close the generator window
-        root = tk.Tk()  # Create a new Tk() instance for the main window
+        self.master.destroy()  
+        root = tk.Tk()  
         MainWindow(root)
         root.mainloop()
 
     def paste(self):
-        self.link_entry.insert(0, clipboard.paste())  # Get paste into link_entry
+        self.link_entry.insert(0, clipboard.paste()) 
 
     def generate_qr_code(self):
-        self.master.withdraw()  # Hide the main window
+        self.master.withdraw() 
         link = self.link_entry.get()
 
-        # QR Code Generating
         if link:
             qr = qrcode.QRCode(
                 version=1,
@@ -96,12 +93,10 @@ class QRCodeGenerator:
             qr.add_data(link)
             qr.make(fit=True)
 
-            # Qr Code Coloring
             color = self.color_combo.get()
             img = qr.make_image(fill_color=color, back_color="white")
             save_file_path = filedialog.asksaveasfilename(**self.options)
 
-            # QR Code Saving
             if save_file_path:
                 img.save(save_file_path)
                 self.link_entry.delete(0, tk.END)
@@ -112,13 +107,12 @@ class QRCodeGenerator:
             tk.messagebox.showwarning(
                 "Error", "Please enter both link or content!")
 
-        self.master.deiconify()  # Show the main window again
+        self.master.deiconify() 
 
 
 class QRCodeReader:
     def __init__(self, master):
 
-        # Desinging
         self.master = master
         self.master.title("QR Code Reader")
         self.master.geometry("450x230+700+200")
@@ -160,16 +154,16 @@ class QRCodeReader:
         self.open_url_button.place(x=190, y=145)
 
     def go_back(self):
-        self.master.destroy()  # Close the generator window
-        root = tk.Tk()  # Create a new Tk() instance for the main window
+        self.master.destroy()  
+        root = tk.Tk()  
         MainWindow(root)
         root.mainloop()
 
     def copy(self):
-        clipboard.copy(self.qr_data_entry.get())  # Copy text from the entry
+        clipboard.copy(self.qr_data_entry.get())  
 
     def browse_file(self):
-        self.master.withdraw()  # Hide  the main window
+        self.master.withdraw()  
 
         self.file_path = filedialog.askopenfilename(initialdir=os.getcwd(), filetypes=[
                                                 ("PNG", "*.png"), ("JPEG", "*.jpg")])
@@ -231,8 +225,8 @@ class MainWindow:
         self.reader_button.place(x=180, y=50)
 
     def open_generator(self):
-        self.master.destroy()  # Close the main window
-        generator_window = tk.Tk()  # Create a new Tk() instance for the generator window
+        self.master.destroy() 
+        generator_window = tk.Tk() 
         QRCodeGenerator(generator_window)
         generator_window.mainloop()
 
